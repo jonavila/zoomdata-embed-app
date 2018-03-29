@@ -1,0 +1,21 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "extends": ["airbnb", "plugin:prettier/recommended"],
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "plugins": ["react", "prettier"],
+  "rules": {
+    "no-unused-expressions": ["error", { "allowTaggedTemplates": true }],
+    "react/jsx-filename-extension": "off",
+    "no-param-reassign": [
+      "error",
+      { "props": true, "ignorePropertyModificationsFor": ["zoomdata"] }
+    ],
+    "no-console": ["error", { "allow": ["warn", "error"] }]
+  }
+}
