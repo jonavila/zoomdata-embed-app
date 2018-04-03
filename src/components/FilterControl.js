@@ -1,4 +1,5 @@
 import {
+  Button,
   ButtonGroup,
   Checkbox,
   Icon,
@@ -25,7 +26,6 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import colors from '../utils/colors';
-import Button from './Button';
 
 const ControlHeader = styled.div`
   display: flex;
@@ -47,10 +47,6 @@ const ControlBody = styled.div`
 const FilterList = styled.div`
   padding: 12px;
   min-height: 100px;
-`;
-
-const ButtonHeader = Button.extend`
-  margin-bottom: 12px;
 `;
 
 const StyledNonIdealState = styled(NonIdealState)`
@@ -482,7 +478,7 @@ class FilterPanel extends Component {
     const { filters } = zoomdata;
     return view === 'FILTERLIST' ? (
       <React.Fragment>
-        <ButtonHeader
+        <Button
           text="Add Filter"
           icon="add"
           className="pt-small pt-intent-primary"

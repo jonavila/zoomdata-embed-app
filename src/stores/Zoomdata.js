@@ -2,32 +2,6 @@ import { decorate, flow, observable, extendObservable } from 'mobx';
 
 const { ZoomdataSDK, $ } = window;
 
-export const getControlsCfg = source => {
-  let { controlsCfg } = source;
-  const playerControlCfg = controlsCfg && controlsCfg.playerControlCfg;
-  if (!controlsCfg) {
-    controlsCfg = {
-      playerControlCfg: {},
-      timeControlCfg: null,
-    };
-  }
-  if (source.playbackMode) {
-    controlsCfg.playerControlCfg = {
-      pauseAfterRead: !source.live,
-      timeWindowScale: playerControlCfg.timeWindowScale,
-    };
-    if (!source.live) {
-      controlsCfg.playerControlCfg.stopTime = '$end_of_data';
-    }
-  }
-  return controlsCfg;
-};
-
-export const getVisVariables = (source, chartName) =>
-  source.visualizations.filter(
-    visualization => visualization.name === chartName,
-  )[0].source.variables;
-
 class Zoomdata {
   filters = [];
   sources = [];

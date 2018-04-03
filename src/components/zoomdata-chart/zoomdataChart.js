@@ -1,31 +1,53 @@
 import flowRight from 'lodash.flowright';
 import { action, decorate, extendObservable, observable } from 'mobx';
-import { inject, observer, PropTypes as MobxPropTypes } from 'mobx-react';
+import { inject, PropTypes as MobxPropTypes, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { getControlsCfg, getVisVariables } from '../stores/Zoomdata';
 
-const StyledWidgetBody = styled.div`
-  display: flex;
-  flex: 1 1 auto;
-  width: 100%;
-  visibility: ${props => (props.show ? `visible` : `hidden`)};
-`;
-
-const StyledWidget = styled.div`
+const View = styled.div`
   display: flex;
   height: auto;
   width: 100%;
 `;
 
-class Widget extends Component {
+let ZoomdataChart = class ZoomdataChart extends Component {
   static propTypes = {
     widgetStore: PropTypes.shape({
       queryStatus: PropTypes.string,
       visualization: MobxPropTypes.objectOrObservableObject,
     }).isRequired,
+    zoomdata: PropTypes.shape({
+      client: MobxPropTypes.objectOrObservableObject,
+      visualizations: MobxPropTypes.arrayOrObservableArray,
+    }).isRequired,
   };
+
+  static getControlsCfg = source => {
+    let { controlsCfg } = source;
+    const playerControlCfg = controlsCfg && controlsCfg.playerControlCfg;
+    if (!controlsCfg) {
+      controlsCfg = {
+        playerControlCfg: {},
+        timeControlCfg: null,
+      };
+    }
+    if (source.playbackMode) {
+      controlsCfg.playerControlCfg = {
+        pauseAfterRead: !source.live,
+        timeWindowScale: playerControlCfg.timeWindowScale,
+      };
+      if (!source.live) {
+        controlsCfg.playerControlCfg.stopTime = '$end_of_data';
+      }
+    }
+    return controlsCfg;
+  };
+
+  static getVisVariables = (source, chartName) =>
+    source.visualizations.filter(
+      visualization => visualization.name === chartName,
+    )[0].source.variables;
 
   componentDidMount() {
     this.loadChart();
@@ -56,8 +78,8 @@ class Widget extends Component {
     const { zoomdata, widgetStore, source, chartName } = this.props;
     if (zoomdata) {
       const queryConfig = { filters: [] };
-      const controlsCfg = getControlsCfg(source);
-      const visVariables = getVisVariables(source, chartName);
+      const controlsCfg = ZoomdataChart.getControlsCfg(source);
+      const visVariables = ZoomdataChart.getVisVariables(source, chartName);
       queryConfig.time = controlsCfg.timeControlCfg;
       queryConfig.player = controlsCfg.playerControlCfg;
       try {
@@ -90,7 +112,7 @@ class Widget extends Component {
   render() {
     const { widgetStore } = this.props;
     return (
-      <StyledWidget
+      <View
         show={
           widgetStore.queryStatus === 'DATA' ||
           widgetStore.queryStatus === 'FINISHED'
@@ -101,37 +123,16 @@ class Widget extends Component {
       />
     );
   }
-}
+};
 
-decorate(Widget, {
+decorate(ZoomdataChart, {
   onQueryStart: action,
   onReceivingData: action,
   onQueryComplete: action,
 });
 
-const WidgetWithStores = flowRight([
-  inject('widgetStore', 'zoomdata'),
-  observer,
-])(Widget);
-
-const WidgetBody = ({ widgetStore, source, chartName }) => (
-  <StyledWidgetBody
-    show={
-      widgetStore.queryStatus === 'DATA' ||
-      widgetStore.queryStatus === 'FINISHED'
-    }
-  >
-    <WidgetWithStores source={source} chartName={chartName} />
-  </StyledWidgetBody>
+ZoomdataChart = flowRight([inject('widgetStore', 'zoomdata'), observer])(
+  ZoomdataChart,
 );
 
-WidgetBody.propTypes = {
-  widgetStore: PropTypes.shape({
-    queryStatus: PropTypes.string,
-    visualization: MobxPropTypes.objectOrObservableObject,
-  }).isRequired,
-  source: PropTypes.shape({}).isRequired,
-  chartName: PropTypes.string.isRequired,
-};
-
-export default flowRight([inject('widgetStore'), observer])(WidgetBody);
+export { ZoomdataChart };

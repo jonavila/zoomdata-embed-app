@@ -3,10 +3,11 @@ import React from 'react';
 import { injectGlobal } from 'styled-components';
 import './App.css';
 import ErrorBoundary from './components/ErrorBoundary';
-import Main from './components/Main';
-import Navigation from './components/Navigation';
+import { Dashboard } from './components/dashboard/dashboard';
+import { Navigation } from './components/navigation/navigation';
 import Zoomdata from './stores/Zoomdata';
 import colors from './utils/colors';
+import logo from './assets/zoomdata-logo-charcoal.svg';
 
 injectGlobal`
   html {
@@ -61,8 +62,8 @@ const App = () => {
   return (
     <Provider zoomdata={zoomdata}>
       <ErrorBoundary>
-        <Navigation />
-        <Main />
+        <Navigation logo={logo} />
+        <Dashboard />
       </ErrorBoundary>
     </Provider>
   );
