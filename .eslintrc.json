@@ -16,6 +16,7 @@
       "error",
       { "props": true, "ignorePropertyModificationsFor": ["zoomdata"] }
     ],
-    "no-console": ["error", { "allow": ["warn", "error"] }]
+    "no-console": ["error", { "allow": ["warn", "error"] }],
+    "react/no-multi-comp": "off"
   }
 }

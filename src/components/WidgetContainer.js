@@ -65,7 +65,8 @@ const WidgetContainer = ({ zoomdata, sourceName, chartName }) => {
       source => source.name === sourceName,
     );
     if (!widgetSource) {
-      flow(function* fetchSource() {
+      // eslint-disable-next-line func-names
+      flow(function*() {
         try {
           yield zoomdata.client.sources.update({ name: sourceName });
           zoomdata.sources = zoomdata.client.sources.get();

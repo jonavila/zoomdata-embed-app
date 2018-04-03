@@ -2,17 +2,6 @@ import { decorate, flow, observable, extendObservable } from 'mobx';
 
 const { ZoomdataSDK, $ } = window;
 
-export const application = {
-  host: 'preview.zoomdata.com',
-  port: 443,
-  path: '/zoomdata',
-  secure: true,
-};
-
-export const credentials = {
-  key: 'UZUwYrTcLb',
-};
-
 export const getControlsCfg = source => {
   let { controlsCfg } = source;
   const playerControlCfg = controlsCfg && controlsCfg.playerControlCfg;
@@ -40,31 +29,19 @@ export const getVisVariables = (source, chartName) =>
   )[0].source.variables;
 
 class Zoomdata {
+  filters = [];
   sources = [];
   visualizations = [];
 
-  constructor() {
-    const instance = this;
+  constructor({ application, credentials }) {
     let timeoutId;
 
     window.onresize = () => {
       clearTimeout(timeoutId);
-      timeoutId = window.setTimeout(instance.onWindowResize, 100);
+      timeoutId = window.setTimeout(this.onWindowResize, 100);
     };
 
-    instance.getClient = flow(function*() {
-      try {
-        const client = yield ZoomdataSDK.createClient({
-          credentials,
-          application,
-        });
-        extendObservable(instance, { client }, {}, { deep: false });
-      } catch (err) {
-        console.error(err.message);
-      }
-    });
-
-    instance.getClient();
+    this.getClient({ application, credentials });
   }
 
   onWindowResize = () => {
@@ -75,9 +52,22 @@ class Zoomdata {
       );
     });
   };
+
+  getClient = flow(function*({ application, credentials }) {
+    try {
+      const client = yield ZoomdataSDK.createClient({
+        credentials,
+        application,
+      });
+      extendObservable(this, { client }, {}, { deep: false });
+    } catch (err) {
+      console.error(err.message);
+    }
+  });
 }
 
 decorate(Zoomdata, {
+  filters: observable.shallow,
   sources: observable.shallow,
   visualizations: observable.shallow,
 });
