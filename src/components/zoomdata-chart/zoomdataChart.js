@@ -1,6 +1,5 @@
 import flowRight from 'lodash.flowright';
-import { action, decorate, extendObservable, observable } from 'mobx';
-import { inject, PropTypes as MobxPropTypes, observer } from 'mobx-react';
+import { observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import styled from 'styled-components';
@@ -13,14 +12,16 @@ const View = styled.div`
 
 let ZoomdataChart = class ZoomdataChart extends Component {
   static propTypes = {
-    widgetStore: PropTypes.shape({
-      queryStatus: PropTypes.string,
-      visualization: MobxPropTypes.objectOrObservableObject,
-    }).isRequired,
-    zoomdata: PropTypes.shape({
-      client: MobxPropTypes.objectOrObservableObject,
-      visualizations: MobxPropTypes.arrayOrObservableArray,
-    }).isRequired,
+    chartName: PropTypes.string.isRequired,
+    client: PropTypes.shape({}).isRequired,
+    onChartLoaded: PropTypes.func,
+    onStatusChange: PropTypes.func,
+    source: PropTypes.shape({}).isRequired,
+  };
+
+  static defaultProps = {
+    onChartLoaded: null,
+    onStatusChange: null,
   };
 
   static getControlsCfg = source => {
@@ -53,86 +54,55 @@ let ZoomdataChart = class ZoomdataChart extends Component {
     this.loadChart();
   }
 
-  onQueryStart = () => {
-    const { widgetStore } = this.props;
-    if (widgetStore) {
-      widgetStore.queryStatus = 'STARTED';
+  onChartLoaded = visualization => {
+    const { onChartLoaded, onStatusChange } = this.props;
+    if (onStatusChange) {
+      onStatusChange(`CHART_LOADED`);
+    }
+    if (onChartLoaded) {
+      onChartLoaded(visualization);
     }
   };
 
-  onReceivingData = () => {
-    const { widgetStore } = this.props;
-    if (widgetStore) {
-      widgetStore.queryStatus = 'DATA';
-    }
-  };
-
-  onQueryComplete = () => {
-    const { widgetStore } = this.props;
-    if (widgetStore) {
-      widgetStore.queryStatus = 'FINISHED';
-    }
-  };
+  chartDiv = React.createRef();
 
   loadChart = async () => {
-    const { zoomdata, widgetStore, source, chartName } = this.props;
-    if (zoomdata) {
-      const queryConfig = { filters: [] };
-      const controlsCfg = ZoomdataChart.getControlsCfg(source);
-      const visVariables = ZoomdataChart.getVisVariables(source, chartName);
-      queryConfig.time = controlsCfg.timeControlCfg;
-      queryConfig.player = controlsCfg.playerControlCfg;
-      try {
-        const visualization = await zoomdata.client.visualize({
-          config: queryConfig,
-          element: this.node,
-          source,
-          variables: visVariables,
-          visualization: chartName,
-        });
-        extendObservable(
-          widgetStore,
-          { visualization },
-          { visualization: observable.ref },
-        );
+    const { chartName, client, onStatusChange, source } = this.props;
+    const queryConfig = { filters: [] };
+    const controlsCfg = ZoomdataChart.getControlsCfg(source);
+    const visVariables = ZoomdataChart.getVisVariables(source, chartName);
+    queryConfig.time = controlsCfg.timeControlCfg;
+    queryConfig.player = controlsCfg.playerControlCfg;
+    try {
+      const visualization = await client.visualize({
+        config: queryConfig,
+        element: this.chartDiv.current,
+        source,
+        variables: visVariables,
+        visualization: chartName,
+      });
 
-        zoomdata.visualizations.push(visualization);
-        visualization.thread.on('thread:start', () => this.onQueryStart());
-        visualization.thread.on('thread:message', () => this.onReceivingData());
-        visualization.thread.on('thread:notDirtyData', () =>
-          this.onQueryComplete(),
-        );
-        visualization.thread.on('thread:noData', () => this.onQueryComplete());
-      } catch (err) {
-        console.error(err.message);
+      if (visualization) {
+        this.onChartLoaded(visualization);
       }
+
+      const { thread } = visualization;
+      thread.on('thread:start', () => onStatusChange(`QUERY_STARTING`));
+      thread.on('thread:message', () => onStatusChange(`RECEIVING_DATA`));
+      thread.on('thread:notDirtyData', () =>
+        onStatusChange(`DATA_NOT_SAMPLED`),
+      );
+      thread.on('thread:noData', () => () => onStatusChange(`NO_DATA`));
+    } catch (err) {
+      console.error(err.message);
     }
   };
 
   render() {
-    const { widgetStore } = this.props;
-    return (
-      <View
-        show={
-          widgetStore.queryStatus === 'DATA' ||
-          widgetStore.queryStatus === 'FINISHED'
-        }
-        innerRef={node => {
-          this.node = node;
-        }}
-      />
-    );
+    return <View innerRef={this.chartDiv} />;
   }
 };
 
-decorate(ZoomdataChart, {
-  onQueryStart: action,
-  onReceivingData: action,
-  onQueryComplete: action,
-});
-
-ZoomdataChart = flowRight([inject('widgetStore', 'zoomdata'), observer])(
-  ZoomdataChart,
-);
+ZoomdataChart = flowRight([observer])(ZoomdataChart);
 
 export { ZoomdataChart };

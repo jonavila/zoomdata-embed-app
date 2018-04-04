@@ -173,7 +173,7 @@ class IncludeExcludeAttributeValues extends Component {
       client: MobxPropTypes.objectOrObservableObject,
       filters: MobxPropTypes.arrayOrObservableArray,
       sources: MobxPropTypes.arrayOrObservableArray,
-      visualizations: MobxPropTypes.arrayOrObservableArray,
+      charts: MobxPropTypes.arrayOrObservableArray,
     }).isRequired,
   };
 
@@ -246,6 +246,7 @@ class IncludeExcludeAttributeValues extends Component {
       }
 
       setTimeout(
+        // eslint-disable-next-line func-names
         flow(function*() {
           zoomdata.filters = yield visualization.query.getFilters();
         }),

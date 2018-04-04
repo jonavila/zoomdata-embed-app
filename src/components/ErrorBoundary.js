@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-class ErrorBoundary extends Component {
+export class ErrorBoundary extends Component {
   static propTypes = {
     children: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.node),
@@ -29,5 +29,3 @@ class ErrorBoundary extends Component {
     return this.props.children;
   }
 }
-
-export default ErrorBoundary;

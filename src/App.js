@@ -1,13 +1,17 @@
-import { Provider } from 'mobx-react';
-import React from 'react';
+import flowRight from 'lodash.flowright';
+import { decorate, flow, observable } from 'mobx';
+import { observer } from 'mobx-react';
+import React, { Component } from 'react';
 import { injectGlobal } from 'styled-components';
 import './App.css';
-import ErrorBoundary from './components/ErrorBoundary';
-import { Dashboard } from './components/dashboard/dashboard';
-import { Navigation } from './components/navigation/navigation';
-import Zoomdata from './stores/Zoomdata';
-import colors from './utils/colors';
 import logo from './assets/zoomdata-logo-charcoal.svg';
+import { Dashboard } from './components/dashboard/dashboard';
+import { ErrorBoundary } from './components/ErrorBoundary';
+import { Navigation } from './components/navigation/navigation';
+import { Spinner } from './components/spinner/spinner';
+import colors from './utils/colors';
+
+const { ZoomdataSDK } = window;
 
 injectGlobal`
   html {
@@ -28,6 +32,7 @@ injectGlobal`
   }
   
   #root {
+    position: relative;
     height: 100%;
   }
   
@@ -45,28 +50,53 @@ injectGlobal`
   }
 `;
 
-const application = {
-  host: 'preview.zoomdata.com',
-  port: 443,
-  path: '/zoomdata',
-  secure: true,
-};
+let App = class App extends Component {
+  static application = {
+    host: 'preview.zoomdata.com',
+    port: 443,
+    path: '/zoomdata',
+    secure: true,
+  };
 
-const credentials = {
-  key: 'UZUwYrTcLb',
-};
+  static credentials = {
+    key: 'UZUwYrTcLb',
+  };
 
-const App = () => {
-  const zoomdata = new Zoomdata({ application, credentials });
+  constructor(props) {
+    super(props);
+    this.getClient();
+  }
 
-  return (
-    <Provider zoomdata={zoomdata}>
+  // eslint-disable-next-line func-names
+  getClient = flow(function*() {
+    try {
+      this.client = yield ZoomdataSDK.createClient({
+        credentials: App.credentials,
+        application: App.application,
+      });
+    } catch (err) {
+      console.error(err.message);
+    }
+  });
+
+  client = null;
+
+  render() {
+    return (
       <ErrorBoundary>
         <Navigation logo={logo} />
-        <Dashboard />
+        {this.client ? (
+          <Dashboard client={this.client} />
+        ) : (
+          <Spinner text="Waiting for Zoomdata client..." />
+        )}
       </ErrorBoundary>
-    </Provider>
-  );
+    );
+  }
 };
 
-export default App;
+decorate(App, { client: observable.ref });
+
+App = flowRight([observer])(App);
+
+export { App };

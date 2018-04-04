@@ -1,37 +1,75 @@
 import flowRight from 'lodash.flowright';
-import { inject, observer, PropTypes as MobxPropTypes } from 'mobx-react';
+import { action, computed, decorate, observable } from 'mobx';
+import { observer } from 'mobx-react';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
+import { Spinner } from '../spinner/spinner';
 import { ZoomdataChart } from '../zoomdata-chart/zoomdataChart';
 
 const View = styled.div`
   display: flex;
   flex: 1 1 auto;
   width: 100%;
-  visibility: ${props => (props.show ? `visible` : `hidden`)};
+  visibility: visible;
 `;
 
-let Body = ({ widgetStore, source, chartName }) => (
-  <View
-    show={
-      widgetStore.queryStatus === 'DATA' ||
-      widgetStore.queryStatus === 'FINISHED'
-    }
-  >
-    <ZoomdataChart source={source} chartName={chartName} />
-  </View>
-);
+let Body = class Body extends Component {
+  static propTypes = {
+    chartName: PropTypes.string.isRequired,
+    client: PropTypes.shape({}).isRequired,
+    onChartLoaded: PropTypes.func,
+    source: PropTypes.shape({}).isRequired,
+  };
 
-Body.propTypes = {
-  widgetStore: PropTypes.shape({
-    queryStatus: PropTypes.string,
-    visualization: MobxPropTypes.objectOrObservableObject,
-  }).isRequired,
-  source: PropTypes.shape({}).isRequired,
-  chartName: PropTypes.string.isRequired,
+  static defaultProps = {
+    onChartLoaded: null,
+  };
+
+  onStatusChange = status => {
+    this.status = status;
+  };
+
+  get statusText() {
+    const { chartName } = this.props;
+    switch (this.status) {
+      case `CHART_LOADING`:
+      case `CHART_LOADED`:
+        return `Loading Chart: ${chartName}`;
+      case `QUERY_STARTING`:
+        return `Running Query...`;
+      default:
+        return ``;
+    }
+  }
+
+  status = `CHART_LOADING`;
+
+  render() {
+    const { chartName, client, onChartLoaded, source } = this.props;
+    return (
+      <React.Fragment>
+        {this.statusText !== `` ? <Spinner text={this.statusText} /> : null}
+        <View>
+          <ZoomdataChart
+            chartName={chartName}
+            client={client}
+            onChartLoaded={onChartLoaded}
+            onStatusChange={this.onStatusChange}
+            source={source}
+          />
+        </View>
+      </React.Fragment>
+    );
+  }
 };
 
-Body = flowRight([inject('widgetStore'), observer])(Body);
+decorate(Body, {
+  onStatusChange: action,
+  status: observable,
+  statusText: computed,
+});
+
+Body = flowRight([observer])(Body);
 
 export { Body };
