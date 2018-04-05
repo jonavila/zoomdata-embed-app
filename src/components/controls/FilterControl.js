@@ -25,7 +25,7 @@ import { fromPromise } from 'mobx-utils';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import colors from '../utils/colors';
+import colors from '../../utils/colors';
 
 const ControlHeader = styled.div`
   display: flex;

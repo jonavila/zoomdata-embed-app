@@ -1,11 +1,8 @@
-import { Button as BlueprintButton } from '@blueprintjs/core';
-import flowRight from 'lodash.flowright';
-import { observer } from 'mobx-react';
-import React from 'react';
 import styled from 'styled-components';
 import colors from '../../../utils/colors';
+import { Button as CoreButton } from '../../button/button';
 
-const View = styled(BlueprintButton)`
+export const Button = styled(CoreButton)`
   &.pt-button.pt-minimal.pt-intent-primary {
     color: ${colors.chromium};
   }
@@ -15,9 +12,3 @@ const View = styled(BlueprintButton)`
     background-color: ${colors.zoomdataBlue};
   }
 `;
-
-let Button = ({ ...props }) => <View {...props} />;
-
-Button = flowRight([observer])(Button);
-
-export { Button };

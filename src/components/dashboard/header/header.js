@@ -5,8 +5,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 import colors from '../../../utils/colors';
-import FilterControl from '../../FilterControl';
-import { Control } from './control';
+import { FilterControl } from '../../controls/filter-control/filterControl';
+import { Popover } from '../../popover/popover';
+import { Button } from './button';
 import { Divider } from './divider';
 import { Title } from './title';
 
@@ -19,22 +20,38 @@ const View = styled.div`
   width: 100%;
 `;
 
-let Header = ({ title }) => (
+let Header = ({ filterManager, title }) => (
   <View>
     <Title value={title} />
     <Divider />
     <ButtonGroup>
-      <Control
-        className="pt-minimal pt-intent-primary"
-        content={<FilterControl />}
-        icon="filter-list"
-      />
+      {filterManager ? (
+        <Popover
+          content={<FilterControl filterManager={filterManager} />}
+          target={
+            <Button
+              className="pt-minimal pt-intent-primary"
+              icon="filter-list"
+            />
+          }
+        />
+      ) : null}
     </ButtonGroup>
   </View>
 );
 
 Header.propTypes = {
+  filterManager: PropTypes.shape({
+    client: PropTypes.shape({}).isRequired,
+    filters: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    metaThread: PropTypes.shape({}).isRequired,
+    source: PropTypes.shape({}).isRequired,
+  }),
   title: PropTypes.string.isRequired,
+};
+
+Header.defaultProps = {
+  filterManager: null,
 };
 
 Header = flowRight([observer])(Header);

@@ -1,11 +1,12 @@
 import flowRight from 'lodash.flowright';
-import { action, decorate, observable } from 'mobx';
+import { action, computed, decorate, flow, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import colors from '../../utils/colors';
 import presets from '../../utils/presets';
+import { Spinner } from '../spinner/spinner';
 import { Widget } from '../widget/widget';
 import { Header } from './header/header';
 
@@ -27,8 +28,11 @@ let Dashboard = class Dashboard extends Component {
 
   constructor(props) {
     super(props);
-    let timeoutId;
+    const sourceNames = ['Sales'];
+    this.getMetaThread();
+    this.getSources(sourceNames);
 
+    let timeoutId;
     window.onresize = () => {
       clearTimeout(timeoutId);
       timeoutId = window.setTimeout(this.onWindowResize, 100);
@@ -48,26 +52,95 @@ let Dashboard = class Dashboard extends Component {
     });
   };
 
+  get isSingleSource() {
+    return this.sourcesMap.size === 1;
+  }
+
+  get filterManager() {
+    if (this.isSingleSource) {
+      const { client } = this.props;
+      return {
+        client,
+        filters: [],
+        metaThread: this.metaThread,
+        source: this.sourcesMap.values().next().value,
+      };
+    }
+    return null;
+  }
+
+  get sources() {
+    return Array.from(this.sourcesMap.values());
+  }
+
+  get sourcesLoaded() {
+    return this.sourcesMap.size > 0;
+  }
+
+  // eslint-disable-next-line func-names
+  getMetaThread = flow(function*() {
+    try {
+      const { client } = this.props;
+      this.metaThread = yield client.createMetaThread();
+    } catch (err) {
+      console.error(err);
+    }
+  });
+
+  // eslint-disable-next-line func-names
+  getSources = flow(function*(sourceNames) {
+    try {
+      const { client } = this.props;
+      const sources = yield Promise.all(
+        sourceNames.map(sourceName =>
+          client.sources.update({ name: sourceName }).then(source => source[0]),
+        ),
+      );
+
+      sources.forEach(
+        source =>
+          !this.sourcesMap.has(source.id)
+            ? this.sourcesMap.set(source.id, source)
+            : null,
+      );
+    } catch (err) {
+      console.error(err);
+    }
+  });
+
+  getSourceByName = name => this.sources.find(source => source.name === name);
+
   charts = [];
+
+  metaThread = null;
+
+  sourcesMap = new Map();
 
   render() {
     const { client } = this.props;
-    return (
+    return this.sourcesLoaded ? (
       <View>
-        <Header title="Embed Example" />
-        <Widget
-          chartName="Packed Bubbles"
-          client={client}
-          onChartLoaded={this.onChartLoaded}
-          sourceName="Sales"
-        />
+        <Header filterManager={this.filterManager} title="Embed Example" />
+        {this.getSourceByName(`Sales`) ? (
+          <Widget
+            chartName="Packed Bubbles"
+            client={client}
+            onChartLoaded={this.onChartLoaded}
+            source={this.getSourceByName(`Sales`)}
+          />
+        ) : null}
       </View>
+    ) : (
+      <Spinner text="Fetching sources..." />
     );
   }
 };
 
 decorate(Dashboard, {
   charts: observable.shallow,
+  filterManager: computed.struct,
+  metaThread: observable.ref,
+  sourcesMap: observable.shallow,
   onChartLoaded: action,
 });
 

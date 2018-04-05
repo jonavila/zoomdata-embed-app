@@ -6,7 +6,7 @@ import { injectGlobal } from 'styled-components';
 import './App.css';
 import logo from './assets/zoomdata-logo-charcoal.svg';
 import { Dashboard } from './components/dashboard/dashboard';
-import { ErrorBoundary } from './components/ErrorBoundary';
+import { ErrorBoundary } from './components/error-boundary/errorBoundary';
 import { Navigation } from './components/navigation/navigation';
 import { Spinner } from './components/spinner/spinner';
 import colors from './utils/colors';
@@ -59,7 +59,7 @@ let App = class App extends Component {
   };
 
   static credentials = {
-    key: 'UZUwYrTcLb',
+    key: 'xVETgahWG5',
   };
 
   constructor(props) {
