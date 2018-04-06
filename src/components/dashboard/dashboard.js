@@ -1,4 +1,3 @@
-import flowRight from 'lodash.flowright';
 import { action, computed, decorate, flow, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import PropTypes from 'prop-types';
@@ -6,7 +5,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import colors from '../../utils/colors';
 import presets from '../../utils/presets';
-import { Spinner } from '../spinner/spinner';
+import { SpinnerWithText } from '../spinner-with-text/spinnerWithText';
 import { Widget } from '../widget/widget';
 import { Header } from './header/header';
 
@@ -60,8 +59,9 @@ let Dashboard = class Dashboard extends Component {
     if (this.isSingleSource) {
       const { client } = this.props;
       return {
+        charts: this.charts,
         client,
-        filters: [],
+        filters: this.filters,
         metaThread: this.metaThread,
         source: this.sourcesMap.values().next().value,
       };
@@ -112,6 +112,8 @@ let Dashboard = class Dashboard extends Component {
 
   charts = [];
 
+  filters = [];
+
   metaThread = null;
 
   sourcesMap = new Map();
@@ -131,19 +133,20 @@ let Dashboard = class Dashboard extends Component {
         ) : null}
       </View>
     ) : (
-      <Spinner text="Fetching sources..." />
+      <SpinnerWithText className="pt-large" text="Fetching sources..." />
     );
   }
 };
 
 decorate(Dashboard, {
-  charts: observable.shallow,
+  charts: observable.ref,
+  filters: observable.shallow,
   filterManager: computed.struct,
   metaThread: observable.ref,
   sourcesMap: observable.shallow,
   onChartLoaded: action,
 });
 
-Dashboard = flowRight([observer])(Dashboard);
+Dashboard = observer(Dashboard);
 
 export { Dashboard };

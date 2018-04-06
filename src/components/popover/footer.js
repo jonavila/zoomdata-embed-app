@@ -4,23 +4,19 @@ import React from 'react';
 import styled from 'styled-components';
 
 const View = styled.div`
-  display: flex;
-  flex-flow: column;
-  min-width: 200px;
-  max-width: 300px;
   padding: 5px;
 `;
 
-let Body = ({ children }) => <View>{children}</View>;
+let Footer = ({ children }) => <View>{children}</View>;
 
-Body.propTypes = {
+Footer.propTypes = {
   children: PropTypes.node,
 };
 
-Body.defaultProps = {
+Footer.defaultProps = {
   children: null,
 };
 
-Body = observer(Body);
+Footer = observer(Footer);
 
-export { Body };
+export { Footer };

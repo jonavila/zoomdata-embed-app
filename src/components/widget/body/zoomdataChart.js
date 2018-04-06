@@ -1,4 +1,3 @@
-import flowRight from 'lodash.flowright';
 import { observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
@@ -103,6 +102,6 @@ let ZoomdataChart = class ZoomdataChart extends Component {
   }
 };
 
-ZoomdataChart = flowRight([observer])(ZoomdataChart);
+ZoomdataChart = observer(ZoomdataChart);
 
 export { ZoomdataChart };

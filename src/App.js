@@ -1,4 +1,3 @@
-import flowRight from 'lodash.flowright';
 import { decorate, flow, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import React, { Component } from 'react';
@@ -8,8 +7,7 @@ import logo from './assets/zoomdata-logo-charcoal.svg';
 import { Dashboard } from './components/dashboard/dashboard';
 import { ErrorBoundary } from './components/error-boundary/errorBoundary';
 import { Navigation } from './components/navigation/navigation';
-import { Spinner } from './components/spinner/spinner';
-import colors from './utils/colors';
+import { SpinnerWithText } from './components/spinner-with-text/spinnerWithText';
 
 const { ZoomdataSDK } = window;
 
@@ -37,15 +35,10 @@ injectGlobal`
   }
   
   .zd-popover {
-    background-color: ${colors.charcoal};
-    padding: 12px;
-    
-    & .pt-popover-arrow-fill {
-      fill: ${colors.charcoal};
-    }
-    
     & .pt-popover-content {
-      background-color: ${colors.charcoal};
+      display: flex;
+      flex-flow: column;
+      max-height: 650px;
     }
   }
 `;
@@ -88,7 +81,10 @@ let App = class App extends Component {
         {this.client ? (
           <Dashboard client={this.client} />
         ) : (
-          <Spinner text="Waiting for Zoomdata client..." />
+          <SpinnerWithText
+            className="pt-large"
+            text="Waiting for Zoomdata client..."
+          />
         )}
       </ErrorBoundary>
     );
@@ -97,6 +93,6 @@ let App = class App extends Component {
 
 decorate(App, { client: observable.ref });
 
-App = flowRight([observer])(App);
+App = observer(App);
 
 export { App };

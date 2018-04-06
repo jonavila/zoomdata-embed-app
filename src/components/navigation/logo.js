@@ -1,4 +1,3 @@
-import flowRight from 'lodash.flowright';
 import { observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -15,6 +14,6 @@ Logo.propTypes = {
   src: PropTypes.string.isRequired,
 };
 
-Logo = flowRight([observer])(Logo);
+Logo = observer(Logo);
 
 export { Logo };

@@ -1,5 +1,4 @@
 import { Navbar, NavbarGroup } from '@blueprintjs/core';
-import flowRight from 'lodash.flowright';
 import { observer } from 'mobx-react/index';
 import ProptTypes from 'prop-types';
 import React from 'react';
@@ -35,6 +34,6 @@ Navigation.defaultProps = {
   logo: defaultLogo,
 };
 
-Navigation = flowRight([observer])(Navigation);
+Navigation = observer(Navigation);
 
 export { Navigation };

@@ -1,8 +1,8 @@
+import { Button as BlueprintButton } from '@blueprintjs/core';
 import styled from 'styled-components';
 import colors from '../../../utils/colors';
-import { Button as CoreButton } from '../../button/button';
 
-export const Button = styled(CoreButton)`
+export const Button = styled(BlueprintButton)`
   &.pt-button.pt-minimal.pt-intent-primary {
     color: ${colors.chromium};
   }

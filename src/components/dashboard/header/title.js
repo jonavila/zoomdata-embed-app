@@ -1,5 +1,4 @@
 import { EditableText } from '@blueprintjs/core';
-import flowRight from 'lodash.flowright';
 import { observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -22,6 +21,6 @@ Title.propTypes = {
   value: PropTypes.string.isRequired,
 };
 
-Title = flowRight([observer])(Title);
+Title = observer(Title);
 
 export { Title };

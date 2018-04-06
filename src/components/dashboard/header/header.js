@@ -1,14 +1,11 @@
-import { ButtonGroup } from '@blueprintjs/core';
-import flowRight from 'lodash.flowright';
-import { observer } from 'mobx-react';
+import { ButtonGroup, NavbarDivider, Popover } from '@blueprintjs/core';
+import { observer, PropTypes as MobxPropTypes } from 'mobx-react';
 import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 import colors from '../../../utils/colors';
 import { FilterControl } from '../../controls/filter-control/filterControl';
-import { Popover } from '../../popover/popover';
 import { Button } from './button';
-import { Divider } from './divider';
 import { Title } from './title';
 
 const View = styled.div`
@@ -21,13 +18,15 @@ const View = styled.div`
 `;
 
 let Header = ({ filterManager, title }) => (
-  <View>
+  <View className="pt-dark">
     <Title value={title} />
-    <Divider />
+    <NavbarDivider />
     <ButtonGroup>
       {filterManager ? (
         <Popover
+          className="pt-dark"
           content={<FilterControl filterManager={filterManager} />}
+          popoverClassName="zd-popover"
           target={
             <Button
               className="pt-minimal pt-intent-primary"
@@ -42,8 +41,9 @@ let Header = ({ filterManager, title }) => (
 
 Header.propTypes = {
   filterManager: PropTypes.shape({
+    charts: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     client: PropTypes.shape({}).isRequired,
-    filters: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    filters: PropTypes.oneOfType([MobxPropTypes.observableArray]).isRequired,
     metaThread: PropTypes.shape({}).isRequired,
     source: PropTypes.shape({}).isRequired,
   }),
@@ -54,6 +54,6 @@ Header.defaultProps = {
   filterManager: null,
 };
 
-Header = flowRight([observer])(Header);
+Header = observer(Header);
 
 export { Header };

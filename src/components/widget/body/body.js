@@ -1,11 +1,10 @@
-import flowRight from 'lodash.flowright';
 import { action, computed, decorate, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { Spinner } from '../spinner/spinner';
-import { ZoomdataChart } from '../zoomdata-chart/zoomdataChart';
+import { SpinnerWithText } from '../../spinner-with-text/spinnerWithText';
+import { ZoomdataChart } from './zoomdataChart';
 
 const View = styled.div`
   display: flex;
@@ -49,7 +48,9 @@ let Body = class Body extends Component {
     const { chartName, client, onChartLoaded, source } = this.props;
     return (
       <React.Fragment>
-        {this.statusText !== `` ? <Spinner text={this.statusText} /> : null}
+        {this.statusText !== `` ? (
+          <SpinnerWithText className="pt-large" text={this.statusText} />
+        ) : null}
         <View>
           <ZoomdataChart
             chartName={chartName}
@@ -70,6 +71,6 @@ decorate(Body, {
   statusText: computed,
 });
 
-Body = flowRight([observer])(Body);
+Body = observer(Body);
 
 export { Body };

@@ -1,10 +1,9 @@
-import flowRight from 'lodash.flowright';
 import { observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import colors from '../../utils/colors';
-import { Body } from './body';
+import { Body } from './body/body';
 import { Header } from './header';
 
 const View = styled.div`
@@ -47,6 +46,6 @@ let Widget = class Widget extends Component {
   }
 };
 
-Widget = flowRight([observer])(Widget);
+Widget = observer(Widget);
 
 export { Widget };

@@ -1,4 +1,3 @@
-import flowRight from 'lodash.flowright';
 import { observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -28,6 +27,6 @@ Header.propTypes = {
   title: PropTypes.string.isRequired,
 };
 
-Header = flowRight([observer])(Header);
+Header = observer(Header);
 
 export { Header };
