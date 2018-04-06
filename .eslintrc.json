@@ -12,10 +12,10 @@
   "rules": {
     "no-unused-expressions": ["error", { "allowTaggedTemplates": true }],
     "react/jsx-filename-extension": "off",
-    "no-param-reassign": [
-      "error",
-      { "props": true, "ignorePropertyModificationsFor": ["zoomdata"] }
-    ],
-    "no-console": ["error", { "allow": ["warn", "error"] }]
+    "no-console": ["error", { "allow": ["warn", "error"] }],
+    "react/no-multi-comp": "off",
+    "import/prefer-default-export": "off",
+    "import/no-mutable-exports": "off",
+    "prefer-destructuring": ["error", {"object": true, "array": false}]
   }
 }
