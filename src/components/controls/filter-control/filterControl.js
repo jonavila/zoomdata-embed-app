@@ -31,6 +31,7 @@ const SectionHeader = styled.div`
   padding: 0 5px 5px;
 `;
 
+// borrowed from http://hackingui.com/front-end/a-pure-css-solution-for-multiline-text-truncation/
 const FilterValues = styled.div`
   font-size: 12px;
   /* hide text if it more than N lines  */
@@ -165,9 +166,11 @@ let FilterControl = class FilterControl extends Component {
                               }
                             />
                           </ControlGroup>
-                          <FilterValues className="zd-attribute-values">
-                            {filter.value.join(`, `)}
-                          </FilterValues>
+                          {filter.value.length > 1 ? (
+                            <FilterValues className="zd-attribute-values">
+                              {filter.value.join(`, `)}
+                            </FilterValues>
+                          ) : null}
                           <MenuDivider />
                         </React.Fragment>
                       ))}
