@@ -17,27 +17,32 @@ const View = styled.div`
   width: 100%;
 `;
 
-let Header = ({ filterManager, title }) => (
-  <View className="pt-dark">
-    <Title value={title} />
-    <NavbarDivider />
-    <ButtonGroup>
-      {filterManager ? (
-        <Popover
-          className="pt-dark"
-          content={<FilterControl filterManager={filterManager} />}
-          popoverClassName="zd-popover"
-          target={
-            <Button
-              className="pt-minimal pt-intent-primary"
-              icon="filter-list"
-            />
-          }
-        />
-      ) : null}
-    </ButtonGroup>
-  </View>
-);
+let Header = ({ filterManager, title }) => {
+  const { filters } = filterManager;
+  return (
+    <View className="pt-dark">
+      <Title value={title} />
+      <NavbarDivider />
+      <ButtonGroup>
+        {filterManager ? (
+          <Popover
+            className="pt-dark"
+            content={<FilterControl filterManager={filterManager} />}
+            popoverClassName="zd-popover"
+            target={
+              <Button
+                className={`pt-minimal pt-intent-${
+                  filters.length > 0 ? `success` : `primary`
+                }`}
+                icon="filter-list"
+              />
+            }
+          />
+        ) : null}
+      </ButtonGroup>
+    </View>
+  );
+};
 
 Header.propTypes = {
   filterManager: PropTypes.shape({
