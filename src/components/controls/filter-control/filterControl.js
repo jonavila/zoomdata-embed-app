@@ -6,7 +6,7 @@ import {
   MenuItem,
   MenuDivider,
   NonIdealState,
-} from '@blueprintjs/core';
+} from '@blueprintjs/core/';
 import { action, decorate, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { PropTypes as MobxPropTypes } from 'mobx-react/index';
