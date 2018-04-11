@@ -1,10 +1,14 @@
+import convert from 'htmr';
 import { action, computed, decorate, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { ChartTooltip } from '../../chart-tooltip/chartTooltips';
 import { SpinnerWithText } from '../../spinner-with-text/spinnerWithText';
 import { ZoomdataChart } from './zoomdataChart';
+
+const { $ } = window;
 
 const View = styled.div`
   display: flex;
@@ -25,6 +29,17 @@ let Body = class Body extends Component {
     onChartLoaded: null,
   };
 
+  onTooltipShow = options => {
+    const { x, y } = options;
+    this.tooltipShow = true;
+    this.tooltipContent = $.parseHTML(options.content())[0].outerHTML;
+    this.setTooltipCoordinates({ x, y });
+  };
+
+  onTooltipHide = () => {
+    this.tooltipShow = false;
+  };
+
   onStatusChange = status => {
     this.status = status;
   };
@@ -42,7 +57,20 @@ let Body = class Body extends Component {
     }
   }
 
+  setTooltipCoordinates = coordinates => {
+    this.tooltipCoordinates = coordinates;
+  };
+
   status = `CHART_LOADING`;
+
+  tooltipContent = null;
+
+  tooltipCoordinates = {
+    x: 0,
+    y: 0,
+  };
+
+  tooltipShow = false;
 
   render() {
     const { chartName, client, onChartLoaded, source } = this.props;
@@ -57,8 +85,16 @@ let Body = class Body extends Component {
             client={client}
             onChartLoaded={onChartLoaded}
             onStatusChange={this.onStatusChange}
+            onTooltipShow={this.onTooltipShow}
+            onTooltipHide={this.onTooltipHide}
             source={source}
           />
+          <ChartTooltip
+            coordinates={this.tooltipCoordinates}
+            show={this.tooltipShow}
+          >
+            {this.tooltipContent ? convert(this.tooltipContent) : <div />}
+          </ChartTooltip>
         </View>
       </React.Fragment>
     );
@@ -67,8 +103,13 @@ let Body = class Body extends Component {
 
 decorate(Body, {
   onStatusChange: action,
+  onTooltipShow: action,
+  onTooltipHide: action,
   status: observable,
   statusText: computed,
+  setTooltipCoordinates: action,
+  tooltipCoordinates: observable,
+  tooltipShow: observable,
 });
 
 Body = observer(Body);

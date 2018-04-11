@@ -34,6 +34,12 @@ injectGlobal`
     height: 100%;
   }
   
+  #tooltip-root {
+    position: absolute;
+    z-index: 999;
+    pointer-events: none;
+  }
+  
   .zd-popover {
     & .pt-popover-content {
       display: flex;

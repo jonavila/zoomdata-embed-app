@@ -1,2 +1,447 @@
 @import '~@blueprintjs/core/lib/css/blueprint.css';
 @import '~@blueprintjs/icons/lib/css/blueprint-icons.css';
+/* CSS for Zoomdata tooltips*/
+.zdView-Tooltip {
+  font-size: 12px;
+  position: absolute;
+  pointer-events: none;
+  z-index: 1001;
+  margin: 2px;
+}
+.zdView-Tooltip.visualization-tooltip
+  .zd_controls_tooltip_shape
+  .zd_controls_tooltip_tail {
+  display: none;
+}
+.zdView-Tooltip.expanded {
+  z-index: 2099;
+}
+.zdView-Tooltip#tooltip-root .zd_controls_tooltip_shape {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 6px;
+  right: 0;
+  z-index: 1;
+  border: none;
+  border-radius: 0;
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.14), 0 3px 4px 0 rgba(0, 0, 0, 0.12),
+    0 1px 5px 0 rgba(0, 0, 0, 0.2);
+}
+.zdView-Tooltip .zd_controls_tooltip_content {
+  position: relative;
+  min-width: 120px;
+  max-width: 240px;
+  display: inline-block;
+  z-index: 3;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_header
+  + .zd_tooltip_info_group {
+  border-top: 1px solid #d2d2d2;
+}
+.zdView-Tooltip .zd_controls_tooltip_content .zd_tooltip_info_group {
+  overflow: hidden;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group.extended_data {
+  padding: 4px 8px;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group.extended_data.single-grouped
+  table.zd_tooltip_info_table
+  tbody.zd_tooltip_info_table_body
+  tr
+  td.zd_tooltip_info_table_col {
+  display: none;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group.extended_data.single-grouped
+  table.zd_tooltip_info_table
+  tbody.zd_tooltip_info_table_body
+  tr
+  td.zd_tooltip_info_table_col:nth-child(2) {
+  display: table-cell;
+  padding-left: 0;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group.extended_data
+  table.zd_tooltip_info_table {
+  table-layout: fixed;
+  border-collapse: separate;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group.extended_data
+  table.zd_tooltip_info_table
+  thead.zd_tooltip_info_table_header
+  tr {
+  font-size: 11px;
+  height: 16px;
+  line-height: 16px;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group.extended_data
+  table.zd_tooltip_info_table
+  thead.zd_tooltip_info_table_header
+  tr
+  td.zd_tooltip_info_table_col {
+  padding: 0 0 0 8px;
+  max-width: 108px;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group.extended_data
+  table.zd_tooltip_info_table
+  thead.zd_tooltip_info_table_header
+  tr
+  td.zd_tooltip_info_table_col.empty {
+  display: none;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group.extended_data
+  table.zd_tooltip_info_table
+  thead.zd_tooltip_info_table_header
+  tr
+  td.zd_tooltip_info_table_col.empty
+  + td {
+  padding-left: 0;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group.extended_data
+  table.zd_tooltip_info_table
+  thead.zd_tooltip_info_table_header
+  tr
+  td.zd_tooltip_info_table_col:first-child {
+  padding-left: 0;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group.extended_data
+  table.zd_tooltip_info_table
+  tbody.zd_tooltip_info_table_body
+  tr {
+  font-size: 12px;
+  height: 16px;
+  line-height: 16px;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group.extended_data
+  table.zd_tooltip_info_table
+  tbody.zd_tooltip_info_table_body
+  tr
+  td.zd_tooltip_info_table_col {
+  padding: 0;
+  border-top: 2px solid transparent;
+  width: 1px;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group.extended_data
+  table.zd_tooltip_info_table
+  tbody.zd_tooltip_info_table_body
+  tr
+  td.zd_tooltip_info_table_col:first-child {
+  max-width: 10px;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group.extended_data
+  table.zd_tooltip_info_table
+  tbody.zd_tooltip_info_table_body
+  tr
+  td.zd_tooltip_info_table_col:nth-child(2) {
+  max-width: 94px;
+  padding-left: 4px;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group.extended_data
+  table.zd_tooltip_info_table
+  tbody.zd_tooltip_info_table_body
+  tr
+  td.zd_tooltip_info_table_col:nth-child(3),
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group.extended_data
+  table.zd_tooltip_info_table
+  tbody.zd_tooltip_info_table_body
+  tr
+  td.zd_tooltip_info_table_col:nth-child(4) {
+  padding-left: 8px;
+  text-align: right;
+  width: 1px;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group.extended_data
+  table.zd_tooltip_info_table
+  tbody.zd_tooltip_info_table_body
+  tr
+  td.zd_tooltip_info_table_col:nth-child(3) {
+  max-width: 75px;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group.extended_data
+  table.zd_tooltip_info_table
+  tbody.zd_tooltip_info_table_body
+  tr
+  td.zd_tooltip_info_table_col:nth-child(4) {
+  max-width: 50px;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group.line_trends
+  .zd_tooltip_info_table {
+  margin: 4px 8px;
+  display: table;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group.line_trends
+  .zd_tooltip_info_table
+  .zd_tooltip_info_table_row {
+  padding: 0;
+  display: table-row;
+  color: #939393;
+  border-top: none;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group.line_trends
+  .zd_tooltip_info_table
+  .zd_tooltip_info_table_row:first-child
+  .zd_tooltip_info_table_col {
+  padding-top: 0;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group.line_trends
+  .zd_tooltip_info_table
+  .zd_tooltip_info_table_row#active_row {
+  color: #323232;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group.line_trends
+  .zd_tooltip_info_table
+  .zd_tooltip_info_table_row
+  .zd_tooltip_info_table_col {
+  height: 16px;
+  line-height: 16px;
+  border-left: 8px solid transparent;
+  max-width: 108px;
+  padding-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group.line_trends
+  .zd_tooltip_info_table
+  .zd_tooltip_info_table_row
+  .zd_tooltip_info_table_col:first-child {
+  border-left: none;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group.line_trends
+  .zd_tooltip_info_table
+  .zd_tooltip_info_table_row
+  .zd_tooltip_info_table_col:last-child {
+  text-align: right;
+  max-width: 96px;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group.line_trends
+  .zd_tooltip_info_table
+  .zd_tooltip_info_table_row
+  .zd_tooltip_info_table_col.is_active
+  + .zd_tooltip_info_table_col,
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group.line_trends
+  .zd_tooltip_info_table
+  .zd_tooltip_info_table_row
+  .zd_tooltip_info_table_col.is_inactive
+  + .zd_tooltip_info_table_col {
+  border-left: 4px solid transparent;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group:not(.customized) {
+  padding: 0 8px;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group:not(.customized)
+  .zd_tooltip_info_table_row {
+  display: table-row;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group:not(.customized)
+  .zd_tooltip_info_table_col {
+  max-width: 108px;
+  display: table-cell;
+  padding: 3px 3px 3px 0px;
+  line-height: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group:not(.customized)
+  .zd_tooltip_info_table_row:last-child
+  > .zd_tooltip_info_table_col {
+  border-bottom: none;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group:not(.customized)
+  .zd_tooltip_info_table_row
+  > .zd_tooltip_info_table_col:last-child {
+  font-weight: bold;
+  max-width: 50%;
+  text-overflow: ellipsis;
+  text-align: right;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group
+  .zd_tooltip_info_table
+  > .zd_tooltip_info_table_row {
+  border-top: 1px solid #d2d2d2;
+  padding: 4px 8px;
+  width: calc(100% - 16px);
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group
+  .zd_tooltip_info_table
+  > .zd_tooltip_info_table_row:first-child {
+  border-top: none;
+}
+.zdView-Tooltip
+  .zd_controls_tooltip_content
+  .zd_tooltip_info_group
+  .zd_tooltip_info_table
+  > .zd_tooltip_info_table_row
+  .zd_tooltip_info_table_col_value {
+  border-left: 8px solid transparent;
+}
+.zdView-Tooltip .zd_controls_tooltip_content .icon-active,
+.zdView-Tooltip .zd_controls_tooltip_content .icon-inactive {
+  border: none;
+  margin-top: 3px;
+}
+.zdView-Tooltip.no-padding .zd_controls_tooltip_content {
+  display: block;
+  padding: 0;
+}
+.zdView-Tooltip .zd_controls_tooltip_stroke {
+  stroke: red;
+  fill: white;
+  stroke-width: 2px;
+  stroke-linecap: round;
+}
+.zdView-Tooltip .zd_tooltip_info_header {
+  padding: 4px 8px;
+  box-sizing: border-box;
+}
+.zdView-Tooltip .zd_tooltip_info_header_label,
+.zdView-Tooltip .zd_tooltip_info_header_value {
+  height: 16px;
+  line-height: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.zdView-Tooltip .zd_tooltip_info_header_label {
+  color: #939393;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+.zdView-Tooltip .zd_tooltip_info_header_value {
+  color: #323232;
+  margin-top: 2px;
+  font-size: 12px;
+}
+.zdView-Tooltip .zd_tooltip_info_header_value .color_icon.active {
+  height: 10px;
+  width: 10px;
+  margin-right: 4px;
+  display: block;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  float: left;
+}
+.zdView-Tooltip .zd_tooltip_info_label {
+  color: #939393;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.zdView-Tooltip .zd_tooltip_info_table_row,
+.zdView-Tooltip .zd_tooltip_info_table_col {
+  border: none;
+}
+.zdView-Tooltip .zd_tooltip_info_table_row_label,
+.zdView-Tooltip .zd_tooltip_info_table_row_value,
+.zdView-Tooltip .zd_tooltip_info_table_col_label,
+.zdView-Tooltip .zd_tooltip_info_table_col_value {
+  height: 16px;
+  line-height: 16px;
+  max-width: 224px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.zdView-Tooltip .zd_tooltip_info_table_row_label,
+.zdView-Tooltip .zd_tooltip_info_table_col_label {
+  color: #939393;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+.zdView-Tooltip .zd_tooltip_info_table_row_value,
+.zdView-Tooltip .zd_tooltip_info_table_col_value {
+  color: #323232;
+  max-width: 130px;
+  margin-top: 2px;
+  font-size: 12px;
+}
+.zdView-Tooltip .zd_tooltip_info_table_row_value .color_icon.active,
+.zdView-Tooltip .zd_tooltip_info_table_col_value .color_icon.active {
+  height: 10px;
+  width: 10px;
+  margin-right: 4px;
+  display: block;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  float: left;
+}
+.zdView-Tooltip .zd_tooltip_info_table_row .is_inactive,
+.zdView-Tooltip .zd_tooltip_info_table_col .is_inactive {
+  color: #939393;
+}
+.zdView-Tooltip .zd_tooltip_info_table_col {
+  display: table-cell;
+}
