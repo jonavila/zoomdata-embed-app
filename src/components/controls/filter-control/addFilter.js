@@ -62,7 +62,7 @@ let AddFilter = class AddFilter extends Component {
     this.props.filterManager.metaThread
       .getLatestResponse()
       .getField(this.props.filter.path.name)) ||
-    null;
+  null;
 
   render() {
     return this.getFields.case({

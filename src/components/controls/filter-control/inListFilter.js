@@ -137,7 +137,10 @@ let InListFilter = class InListFilter extends Component {
   };
 
   getValues = fromPromise((resolve, reject) => {
-    const { field, filterManager: { client, source } } = this.props;
+    const {
+      field,
+      filterManager: { client, source },
+    } = this.props;
     const applicationPath = client.getHomePath();
     const { key } = client.getCredentials();
     const endpoint = `/service/sources/${

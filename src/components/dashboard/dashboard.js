@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import colors from '../../utils/colors';
-import presets from '../../utils/presets';
+import { navigationHeight } from '../../utils/presets';
 import { SpinnerWithText } from '../spinner-with-text/spinnerWithText';
 import { Widget } from '../widget/widget';
 import { Header } from './header/header';
@@ -17,7 +17,7 @@ const View = styled.main`
   height: 100%;
   position: relative;
   background-color: ${colors.ui.whisper};
-  padding-top: ${presets.headerHeight}px;
+  margin-top: ${navigationHeight}px;
 `;
 
 let Dashboard = class Dashboard extends Component {

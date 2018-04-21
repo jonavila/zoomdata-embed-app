@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react';
+import Popper from 'popper.js';
 import PropTypes from 'prop-types';
 import { Component } from 'react';
 import ReactDOM from 'react-dom';
-import Popper from 'popper.js';
 
 const tooltipRoot = document.getElementById('tooltip-root');
 

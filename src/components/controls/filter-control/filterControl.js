@@ -1,10 +1,10 @@
 import {
   Button,
+  ControlGroup,
   Icon,
   Menu,
-  ControlGroup,
-  MenuItem,
   MenuDivider,
+  MenuItem,
   NonIdealState,
 } from '@blueprintjs/core/';
 import { action, decorate, observable } from 'mobx';
@@ -90,7 +90,9 @@ let FilterControl = class FilterControl extends Component {
   };
 
   onFilterRemove = filter => {
-    const { filterManager: { charts, filters } } = this.props;
+    const {
+      filterManager: { charts, filters },
+    } = this.props;
     charts.forEach(chart => {
       chart.query.removeFilters(filter);
     });

@@ -1,3 +1,1 @@
-export default {
-  headerHeight: 50,
-};
+export const navigationHeight = 50;

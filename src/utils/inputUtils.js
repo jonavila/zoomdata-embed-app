@@ -12,3 +12,8 @@ export function handleStringChange(handler) {
 export function handleNumberChange(handler) {
   return handleStringChange(value => handler(+value));
 }
+
+/** Event handler that exposes the target element's key pressed as a string. */
+export function handleKeyPress(handler) {
+  return event => handler(event.key);
+}
